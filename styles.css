@@ -1,0 +1,504 @@
+/* --- Base Styles --- */
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 50px 15px 0;
+  user-select: none;
+  background: #fafafa;
+  color: #222;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  padding-bottom: 50px; /* avoid content hidden under fixed top bar */
+}
+
+/* --- Flashcard --- */
+#flashcard {
+  width: 320px;
+  height: 200px;
+  border: 2px solid #333;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 26px;
+  text-align: center;
+  padding: 24px;
+  cursor: pointer;
+  transition: transform 0.6s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  perspective: 1200px;
+  position: relative;
+  background-color: #fff;
+  user-select: none;
+  margin: 0 auto;
+}
+#flashcard:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  border-color: #007bff; /* subtle blue on hover */
+}
+
+/* --- Card inner and flipping --- */
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s ease, background-color 0.3s ease;
+  transform-style: preserve-3d;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.flipped {
+  transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  user-select: none;
+  color: #222;
+  font-weight: 600;
+}
+
+.card-back {
+  transform: rotateY(180deg);
+  /* background: #f9f9f9; */
+  /* box-shadow: inset 0 0 8px #ddd; */
+}
+
+/* --- Known / Unknown States --- */
+#card-inner.known {
+  background-color: #e6f4ea; /* very soft green */
+  border-color: #28a745; /* bootstrap green */
+  color: #155724; /* dark green text */
+  box-shadow: 0 0 8px #28a74588;
+}
+
+#card-inner.unknown {
+  background-color: #f9e6e6; /* very soft red */
+  border-color: #dc3545; /* bootstrap red */
+  color: #721c24; /* dark red text */
+  box-shadow: 0 0 8px #dc354588;
+}
+
+/* --- Controls container --- */
+#controls {
+  margin: 24px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 360px;
+}
+
+/* Button groups container */
+#controls > div {
+  display: flex;
+  gap: 14px;
+}
+
+/* Buttons */
+#controls > div > button,
+button {
+  flex: 1;
+  min-width: 120px;
+  padding: 10px 16px;
+  font-size: 17px;
+  font-weight: 600;
+  color: #222;
+  background-color: #fff;
+  border: 2px solid #555;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease,
+    box-shadow 0.2s ease;
+  box-sizing: border-box;
+  user-select: none;
+  text-align: center;
+}
+
+/* Hover for all buttons */
+#controls > div > button:hover,
+button:hover {
+  background-color: #f0f0f0;
+  border-color: #111;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Focus visible for accessibility */
+#controls > div > button:focus-visible,
+button:focus-visible {
+  outline: 3px solid #007bff;
+  outline-offset: 2px;
+}
+
+/* Color-coded Known/Unknown buttons */
+#controls > div > button.known-btn {
+  background-color: #28a745;
+  border-color: #218838;
+  color: white;
+  box-shadow: 0 0 8px #28a745aa;
+  transition: background-color 0.3s ease;
+}
+
+#controls > div > button.known-btn:hover {
+  background-color: #218838;
+  border-color: #1e7e34;
+}
+
+#controls > div > button.unknown-btn {
+  background-color: #dc3545;
+  border-color: #c82333;
+  color: white;
+  box-shadow: 0 0 8px #dc3545aa;
+  transition: background-color 0.3s ease;
+}
+
+#controls > div > button.unknown-btn:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+
+/* --- Results container --- */
+#resultsContainer {
+  padding: 24px;
+  max-width: 640px;
+  margin: 30px auto;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  text-align: left;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Unknown cards list */
+.unknown-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.unknown-card {
+  background-color: #f8d7da;
+  border: 1.5px solid #f5c2c7;
+  padding: 14px;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #721c24;
+}
+
+/* Buttons after results */
+.results-buttons {
+  margin: 24px auto 0;
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  max-width: 360px;
+}
+
+.results-buttons button {
+  padding: 12px 20px;
+  font-size: 17px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: 600;
+  min-width: 140px;
+}
+
+.results-buttons button:hover {
+  background-color: #0056b3;
+}
+
+/* --- Containers --- */
+#card-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  margin: 40px auto 0;
+  width: 100%;
+  max-width: 360px;
+}
+
+/* Study mode menu */
+#study-mode-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  margin: 40px auto 0;
+  width: 100%;
+  max-width: 400px;
+  padding: 0 10px;
+}
+
+#study-mode-menu button {
+  padding: 14px 24px;
+  width: 100%;
+  max-width: 320px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 2px solid #333;
+  border-radius: 8px;
+  background-color: #fff;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  user-select: none;
+  text-align: center;
+}
+
+#study-mode-menu button:hover {
+  background-color: #f0f0f0;
+  border-color: #222;
+}
+
+@media (max-width: 500px) {
+  #study-mode-menu button {
+    font-size: 16px;
+    padding: 12px 18px;
+    max-width: 100%;
+  }
+}
+
+/* --- Top bar --- */
+#top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  background: #333;
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  z-index: 1100;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+/* Hamburger icon */
+#hamburger {
+  width: 30px;
+  height: 25px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#hamburger div {
+  height: 4px;
+  background: white;
+  border-radius: 2px;
+}
+
+/* Sidebar menu */
+#sidebar-menu {
+  position: fixed;
+  top: 50px;
+  left: -250px;
+  width: 250px;
+  height: 100%;
+  background: #222;
+  color: white;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  transition: left 0.3s ease;
+  z-index: 1099;
+  font-size: 16px;
+  user-select: none;
+}
+
+#sidebar-menu.open {
+  left: 0;
+}
+
+/* Menu section titles */
+.menu-section {
+  margin-bottom: 20px;
+}
+
+.menu-section > h3 {
+  margin: 10px 0 8px;
+  font-weight: bold;
+  border-bottom: 1px solid #444;
+  padding-bottom: 4px;
+}
+
+/* Menu item */
+.menu-item {
+  padding: 8px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  user-select: none;
+  transition: background-color 0.2s ease;
+  text-align: left;
+}
+
+.menu-item:hover {
+  background: #444;
+}
+
+/* Overlay behind sidebar */
+#sidebar-overlay {
+  position: fixed;
+  top: 50px;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.3);
+  display: none;
+  z-index: 1098;
+}
+
+#sidebar-overlay.visible {
+  display: block;
+}
+
+/* entry */
+#entry-options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  text-align: center;
+  gap: 24px;
+  padding: 20px;
+}
+
+.entry-button-container {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.entry-button-container button {
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 2px solid #333;
+  background-color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.entry-button-container button:hover {
+  background-color: #f0f0f0;
+  border-color: #111;
+}
+
+#card-creator-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 16px;
+}
+
+.input-box {
+  width: 100%;
+  min-height: 80px;
+  padding: 12px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  resize: vertical;
+}
+
+.button-group {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.done-button-container {
+  margin-top: 32px;
+}
+
+#review-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  background: var(--bg-light);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.flashcard-review {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: var(--card-bg, #f9f9f9);
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.input-group {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.flashcard-textarea {
+  flex-grow: 1;
+  padding: 8px 10px;
+  border: 1px solid var(--border-color, #ccc);
+  border-radius: 5px;
+  resize: vertical;
+  font-size: 14px;
+  font-family: inherit;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.flashcard-review p {
+  margin: 5px 0;
+}
+
+#review-container h2 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+#backToEntry {
+  display: block;
+  margin: 30px auto 0;
+  padding: 10px 25px;
+  cursor: pointer;
+  background-color: var(--primary);
+  color: black;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+}
